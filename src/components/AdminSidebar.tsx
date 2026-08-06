@@ -21,7 +21,8 @@ import {
     FileText,
     // LayoutDashboard,
     Building2,
-    LayoutDashboard
+    LayoutDashboard,
+    MessageSquare
 } from "lucide-react";
 import {
     DashboardIcon,
@@ -55,6 +56,7 @@ const primaryNavItems: NavItem[] = [
     {label : "Dashboard" , to : "/admin/dashboard" , icon : <LayoutDashboard size={18} />},
     { label: "Departments", to: "/admin/departments", icon: <Building2 size={18} /> },
     { label: "Tasks", to: "/admin/tasks", icon: <CheckSquare size={18} /> },
+    { label: "Chats", to: "/admin/chats", icon: <MessageSquare size={18} /> },
     { label: "Attendance", to: "/admin/attendance", icon: <CalendarCheck size={18} /> },
     { label: "Meetings", to: "/admin/meetings", icon: <Calendar size={18} /> },
     { label: "Holidays", to: "/admin/holidays", icon: <Calendar size={18} /> },

@@ -217,6 +217,10 @@ const routes: RouteObject[] = [
         element: <AdminTasks />,
       },
       {
+        path: "chats",
+        element: <Chats />,
+      },
+      {
         path: "meetings",
         element: <AdminMeetings />,
       },
@@ -270,6 +274,7 @@ const pageTitles: Record<string, string> = {
   "/admin/past-employees": "Past Employees",
   "/admin/holidays": "Holidays",
   "/admin/tasks": "Tasks",
+  "/admin/chats": "Chats",
   "/admin/meetings": "Meetings",
   "/unauthorized": "Unauthorized",
 };
