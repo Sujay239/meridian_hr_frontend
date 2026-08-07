@@ -35,7 +35,7 @@ import {
 } from "@/components/ui/alert-dialog";
 
 const API_BASE_URL = import.meta.env.VITE_BASE_URL;
-const GOOGLE_MEET_API_KEY = import.meta.env.VITE_GOOGLE_MEET_API_KEY || "AIzaSyA5qKrIOZa1OrefEVOLHLuVpoK250wOIBQ";
+
 
 
 
