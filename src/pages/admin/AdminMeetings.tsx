@@ -44,6 +44,12 @@ import {
 
 const API_BASE_URL = import.meta.env.VITE_BASE_URL;
 
+const formatAvatarUrl = (url?: string) => {
+    if (!url) return undefined;
+    if (url.startsWith("http://") || url.startsWith("https://")) return url;
+    return `${API_BASE_URL}${url.startsWith("/") ? "" : "/"}${url}`;
+};
+
 const validateMeetingTimes = (startIso: string, endIso: string): string | null => {
     const now = new Date();
     const startDate = new Date(startIso);
@@ -569,11 +575,12 @@ const AdminMeetings: React.FC = () => {
                                             key={user.id}
                                             checked={selectedUserIds.includes(user.id)}
                                             onCheckedChange={() => toggleUserSelection(user.id)}
+                                            onSelect={(e) => e.preventDefault()}
                                             className="cursor-pointer focus:bg-slate-100 dark:focus:bg-slate-800 dark:text-white"
                                         >
                                             <div className="flex items-center gap-2">
                                                 <Avatar className="h-8 w-8 items-center justify-center">
-                                                    <AvatarImage src={user.avatar_url} />
+                                                    <AvatarImage src={formatAvatarUrl(user.avatar_url)} />
                                                     <AvatarFallback className="dark:text-white dark:border">{user.name.charAt(0)}</AvatarFallback>
                                                 </Avatar>
                                                 <div className="flex flex-col">
@@ -670,11 +677,12 @@ const AdminMeetings: React.FC = () => {
                                             key={user.id}
                                             checked={selectedUserIds.includes(user.id)}
                                             onCheckedChange={() => toggleUserSelection(user.id)}
+                                            onSelect={(e) => e.preventDefault()}
                                             className="cursor-pointer focus:bg-slate-100 dark:focus:bg-slate-800 dark:text-white"
                                         >
                                             <div className="flex items-center gap-2">
                                                 <Avatar className="h-8 w-8 items-center justify-center">
-                                                    <AvatarImage src={user.avatar_url} />
+                                                    <AvatarImage src={formatAvatarUrl(user.avatar_url)} />
                                                     <AvatarFallback className="dark:text-white dark:border">{user.name.charAt(0)}</AvatarFallback>
                                                 </Avatar>
                                                 <div className="flex flex-col">
@@ -742,7 +750,7 @@ const AdminMeetings: React.FC = () => {
                                         return (
                                             <div key={id} className="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-full border border-slate-200 dark:border-slate-700">
                                                 <Avatar className="h-5 w-5">
-                                                    <AvatarImage src={user.avatar_url} />
+                                                    <AvatarImage src={formatAvatarUrl(user.avatar_url)} />
                                                     <AvatarFallback className="text-[10px]">{user.name.charAt(0)}</AvatarFallback>
                                                 </Avatar>
                                                 <span className="text-xs font-medium dark:text-slate-200">{user.name}</span>
