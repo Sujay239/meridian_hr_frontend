@@ -180,18 +180,20 @@ const Support: React.FC = () => {
     setViewTicket(null);
   };
 
+  const query = (searchQuery || "").toLowerCase();
+
   const filteredFaqs = FAQS.filter(
     (faq) =>
-      faq.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      faq.answer.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      faq.category.toLowerCase().includes(searchQuery.toLowerCase())
+      (faq.question || "").toLowerCase().includes(query) ||
+      (faq.answer || "").toLowerCase().includes(query) ||
+      (faq.category || "").toLowerCase().includes(query)
   );
 
   const filteredTickets = tickets.filter(
     (t) =>
-      t.subject.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      t.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      t.category.toLowerCase().includes(searchQuery.toLowerCase())
+      (t.subject || "").toLowerCase().includes(query) ||
+      (t.id || "").toLowerCase().includes(query) ||
+      (t.category || "").toLowerCase().includes(query)
   );
 
   const getPriorityBadge = (p: SupportTicket["priority"]) => {

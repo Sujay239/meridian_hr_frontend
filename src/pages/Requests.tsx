@@ -69,11 +69,12 @@ const Requests: React.FC = () => {
       const matchesCategory =
         activeCategory === "All" || req.category === activeCategory;
 
+      const query = (searchQuery || "").toLowerCase();
       const matchesSearch =
-        searchQuery.trim() === "" ||
-        req.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        req.reqNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        req.category.toLowerCase().includes(searchQuery.toLowerCase());
+        !searchQuery || !searchQuery.trim() ||
+        (req.title || "").toLowerCase().includes(query) ||
+        (req.reqNumber || "").toLowerCase().includes(query) ||
+        (req.category || "").toLowerCase().includes(query);
 
       const matchesStatus =
         statusFilter === "All statuses" || req.status === statusFilter;

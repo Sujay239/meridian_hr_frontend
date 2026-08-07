@@ -144,11 +144,13 @@ const AdminPayroll: React.FC = () => {
     const [isViewModalOpen, setIsViewModalOpen] = useState(false);
     const [viewRecord, setViewRecord] = useState<PayrollRecord | null>(null);
 
-    const filteredRecords = records.filter(record =>
-        (record.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            record.role.toLowerCase().includes(searchQuery.toLowerCase())) &&
-        (statusFilter === "All" || record.status === statusFilter)
-    );
+    const query = (searchQuery || "").toLowerCase();
+    const filteredRecords = records.filter(record => {
+        const nameMatch = (record.name || "").toLowerCase().includes(query);
+        const roleMatch = (record.role || "").toLowerCase().includes(query);
+        const statusMatch = statusFilter === "All" || record.status === statusFilter;
+        return (nameMatch || roleMatch) && statusMatch;
+    });
 
     const totalPayroll = filteredRecords.reduce((acc, curr) => acc + curr.netPay, 0);
     const paidCount = filteredRecords.filter(r => r.status === "paid").length;
