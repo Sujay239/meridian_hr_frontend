@@ -382,7 +382,7 @@ const AdminTasks: React.FC = () => {
                                     <TableCell>
                                         <div className="flex items-center gap-3">
                                             <Avatar className="h-9 w-9 border border-slate-200 dark:border-slate-700">
-                                                <AvatarImage src={formatAvatarUrl(task.assigned_to_avatar, task.assigned_to_name)} />
+                                                <AvatarImage src={formatAvatarUrl(task.assigned_to_avatar)} />
                                                 <AvatarFallback className="bg-blue-100 text-blue-700 text-xs font-semibold">{(task.assigned_to_name || "?")?.[0]}</AvatarFallback>
                                             </Avatar>
                                             <div className="flex flex-col">
@@ -489,7 +489,7 @@ const AdminTasks: React.FC = () => {
                             <div className="flex justify-between items-start">
                                 <div className="flex items-center gap-3">
                                     <Avatar className="h-10 w-10 border border-slate-200 dark:border-slate-700">
-                                        <AvatarImage src={formatAvatarUrl(task.assigned_to_avatar, task.assigned_to_name)} />
+                                        <AvatarImage src={formatAvatarUrl(task.assigned_to_avatar)} />
                                         <AvatarFallback className="bg-blue-100 text-blue-700 text-sm font-semibold">{(task.assigned_to_name || "?")?.[0]}</AvatarFallback>
                                     </Avatar>
                                     <div>
@@ -722,7 +722,7 @@ const AdminTasks: React.FC = () => {
                                     <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Assigned To</label>
                                     <div className="flex items-center gap-3 p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
                                         <Avatar className="h-10 w-10 border border-slate-200 dark:border-slate-700">
-                                            <AvatarImage src={formatAvatarUrl(viewTask.assigned_to_avatar, viewTask.assigned_to_name)} />
+                                            <AvatarImage src={formatAvatarUrl(viewTask.assigned_to_avatar)} />
                                             <AvatarFallback className="bg-blue-100 text-blue-700 text-sm font-semibold">{(viewTask.assigned_to_name || "?")?.[0]}</AvatarFallback>
                                         </Avatar>
                                         <div>
