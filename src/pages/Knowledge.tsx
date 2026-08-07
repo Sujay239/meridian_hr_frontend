@@ -272,7 +272,7 @@ const Knowledge: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950 p-6 lg:p-10 animate-in fade-in duration-300">
-      <div className="max-w-7xl mx-auto space-y-8">
+      <div className="space-y-8">
         
         {/* --- Header & Title --- */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-200/80 dark:border-slate-800">
