@@ -418,9 +418,13 @@ const AdminMeetings: React.FC = () => {
                                 <Input id="end" type="datetime-local" value={endTime} onChange={(e) => setEndTime(e.target.value)} className="bg-slate-50 dark:bg-slate-900 dark:text-white" />
                             </div>
                         </div>
+                        <div className="grid gap-2">
+                            <Label htmlFor="joinUrl">Meeting Link (Optional)</Label>
+                            <Input id="joinUrl" type="url" value={joinUrl} onChange={(e) => setJoinUrl(e.target.value)} placeholder="e.g. https://meet.google.com/abc-defg-hij (Leave blank to auto-generate)" className="bg-slate-50 dark:bg-slate-900 dark:text-white" />
+                        </div>
                         <div className="flex items-center gap-2.5 p-3 rounded-xl bg-blue-50/80 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border border-blue-100 dark:border-blue-900/50 text-xs font-medium">
                             <Video className="h-4 w-4 shrink-0 text-blue-600 dark:text-blue-400" />
-                            <span>A Google Meet room link will automatically be generated for this scheduled meeting date & time.</span>
+                            <span>Provide a custom meeting URL or leave blank to automatically generate a Google Meet room.</span>
                         </div>
 
                         {/* Multi-Select Users */}
@@ -511,9 +515,13 @@ const AdminMeetings: React.FC = () => {
                                 <Input id="edit-end" type="datetime-local" value={endTime} onChange={(e) => setEndTime(e.target.value)} className="bg-slate-50 dark:bg-slate-900 dark:text-white" />
                             </div>
                         </div>
+                        <div className="grid gap-2">
+                            <Label htmlFor="edit-joinUrl">Meeting Link</Label>
+                            <Input id="edit-joinUrl" type="url" value={joinUrl} onChange={(e) => setJoinUrl(e.target.value)} placeholder="e.g. https://meet.google.com/abc-defg-hij" className="bg-slate-50 dark:bg-slate-900 dark:text-white" />
+                        </div>
                         <div className="flex items-center gap-2.5 p-3 rounded-xl bg-blue-50/80 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border border-blue-100 dark:border-blue-900/50 text-xs font-medium">
                             <Video className="h-4 w-4 shrink-0 text-blue-600 dark:text-blue-400" />
-                            <span>A Google Meet room link is automatically assigned to this meeting.</span>
+                            <span>Provide a custom meeting URL or leave blank to use auto-generated link.</span>
                         </div>
 
                         {/* Multi-Select Users */}

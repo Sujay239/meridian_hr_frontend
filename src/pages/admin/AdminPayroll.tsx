@@ -22,6 +22,14 @@ import { useNotification } from "../../components/NotificationProvider";
 
 const API_BASE_URL = import.meta.env.VITE_BASE_URL;
 
+const formatAvatarUrl = (url?: string) => {
+    if (!url) return "";
+    if (url.startsWith("http://") || url.startsWith("https://")) return url;
+    if (url.startsWith("/uploads/")) return `${API_BASE_URL}${url}`;
+    if (url.startsWith("uploads/")) return `${API_BASE_URL}/${url}`;
+    return `${API_BASE_URL}/uploads/${url}`;
+};
+
 interface PayrollRecord {
     id: number;
     name: string;
@@ -318,7 +326,7 @@ const AdminPayroll: React.FC = () => {
                         <div className="p-6 pb-2">
                             <div className="flex flex-col items-center text-center space-y-3">
                                 <Avatar className="h-20 w-20 border-4 border-white dark:border-slate-800 shadow-lg mb-2">
-                                    <AvatarImage src={viewRecord.avatar} />
+                                    <AvatarImage src={formatAvatarUrl(viewRecord.avatar)} />
                                     <AvatarFallback className="bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 text-2xl font-bold">
                                         {viewRecord.name.charAt(0)}
                                     </AvatarFallback>
@@ -587,7 +595,7 @@ const AdminPayroll: React.FC = () => {
                                                 <td className="px-6 py-4">
                                                     <div className="flex items-center gap-3">
                                                         <Avatar className="h-9 w-9 border border-slate-200 dark:border-slate-700">
-                                                            <AvatarImage src={record.avatar} />
+                                                            <AvatarImage src={formatAvatarUrl(record.avatar)} />
                                                             <AvatarFallback className="bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400">{record.name.charAt(0)}</AvatarFallback>
                                                         </Avatar>
                                                         <div>
@@ -700,7 +708,7 @@ const AdminPayroll: React.FC = () => {
                                     <div className="flex justify-between items-start mb-4">
                                         <div className="flex items-center gap-3">
                                             <Avatar className="h-10 w-10 border border-slate-200 dark:border-slate-700">
-                                                <AvatarImage src={record.avatar} />
+                                                <AvatarImage src={formatAvatarUrl(record.avatar)} />
                                                 <AvatarFallback className="bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400">{record.name.charAt(0)}</AvatarFallback>
                                             </Avatar>
                                             <div>
