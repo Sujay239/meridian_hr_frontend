@@ -115,25 +115,25 @@ const DateTimePickerInput: React.FC<{
             <Label className="text-slate-700 dark:text-slate-300 font-medium text-xs md:text-sm">
                 {label} {required && <span className="text-red-500">*</span>}
             </Label>
-            <div className="grid grid-cols-5 gap-2">
-                <div className="col-span-3">
+            <div className="flex gap-2 items-center">
+                <div className="flex-1 min-w-0">
                     <DatePicker
                         value={datePart}
                         onChange={handleDateChange}
                         placeholder="Select date"
                     />
                 </div>
-                <div className="col-span-2">
+                <div className="w-[115px] shrink-0">
                     <Select value={timePart} onValueChange={handleTimeChange}>
-                        <SelectTrigger className="bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white h-10 rounded-xl cursor-pointer">
-                            <Clock className="h-4 w-4 text-slate-500 mr-1.5 shrink-0" />
+                        <SelectTrigger className="bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white h-10 px-2.5 rounded-xl cursor-pointer text-xs md:text-sm">
+                            <Clock className="h-3.5 w-3.5 text-slate-500 mr-1 shrink-0" />
                             <SelectValue placeholder="Time">
                                 {formatTimeLabel(timePart)}
                             </SelectValue>
                         </SelectTrigger>
                         <SelectContent className="max-h-56 bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 z-[99999]">
                             {TIME_OPTIONS.map((t) => (
-                                <SelectItem key={t} value={t} className="cursor-pointer">
+                                <SelectItem key={t} value={t} className="cursor-pointer text-xs">
                                     {formatTimeLabel(t)}
                                 </SelectItem>
                             ))}
@@ -512,7 +512,7 @@ const AdminMeetings: React.FC = () => {
 
             {/* Create / Edit Form Component - Reused for both but wrapped in separate Dialogs due to separate Open states */}
             <Dialog open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen}>
-                <DialogContent className="sm:max-w-[500px] max-h-[85vh] overflow-y-auto bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800">
+                <DialogContent className="sm:max-w-[650px] max-h-[85vh] overflow-y-auto bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800">
                     <DialogHeader>
                         <DialogTitle className="dark:text-white">Schedule New Meeting</DialogTitle>
                     </DialogHeader>
@@ -613,7 +613,7 @@ const AdminMeetings: React.FC = () => {
             </Dialog>
 
             <Dialog open={isEditModalOpen} onOpenChange={setIsEditModalOpen}>
-                <DialogContent className="sm:max-w-[500px] max-h-[85vh] overflow-y-auto bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800">
+                <DialogContent className="sm:max-w-[650px] max-h-[85vh] overflow-y-auto bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800">
                     <DialogHeader>
                         <DialogTitle className="dark:text-white">Edit Meeting Details</DialogTitle>
                     </DialogHeader>
