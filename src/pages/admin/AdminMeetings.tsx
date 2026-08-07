@@ -44,13 +44,6 @@ import {
 
 const API_BASE_URL = import.meta.env.VITE_BASE_URL;
 
-const getMinDateTimeLocal = () => {
-    const now = new Date();
-    const offsetMs = now.getTimezoneOffset() * 60000;
-    const localNow = new Date(now.getTime() - offsetMs);
-    return localNow.toISOString().slice(0, 16);
-};
-
 const validateMeetingTimes = (startIso: string, endIso: string): string | null => {
     const now = new Date();
     const startDate = new Date(startIso);
