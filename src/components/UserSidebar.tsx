@@ -18,7 +18,7 @@ import {
   Home,
   CheckSquare,
   FileText,
-  Calendar,
+  Presentation,
   Building2
 } from "lucide-react";
 import {
@@ -55,7 +55,7 @@ const primaryNavItems: NavItem[] = [
   { label: "Chats", to: "/user/chats", icon: <MessageSquare size={18} /> },
   { label: "Payroll", to: "/user/payroll", icon: <Wallet size={18} /> },
   { label: "Apply Leave", to: "/user/leave", icon: <FileText size={18} /> },
-  { label: "Meetings", to: "/user/meetings", icon: <Calendar size={18} /> },
+  { label: "Meetings", to: "/user/meetings", icon: <Presentation size={18} /> },
 ];
 
 const secondaryNavItems: NavItem[] = [
