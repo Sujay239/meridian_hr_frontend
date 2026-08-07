@@ -10,6 +10,7 @@ import {
     Calendar,
     Trash2,
     Pencil,
+    Eye,
     AlertTriangle
 } from 'lucide-react';
 import {
@@ -88,6 +89,10 @@ const AdminTasks: React.FC = () => {
         assigned_to: ''
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
+
+    // View Details Modal State
+    const [viewTask, setViewTask] = useState<Task | null>(null);
+    const [isViewModalOpen, setIsViewModalOpen] = useState(false);
 
     const { showSuccess, showError } = useNotification();
     const API_BASE_URL = import.meta.env.VITE_BASE_URL;
@@ -420,11 +425,24 @@ const AdminTasks: React.FC = () => {
                                         </div>
                                     </TableCell>
                                     <TableCell className="text-right">
-                                        <div className="flex items-center justify-end gap-2">
+                                        <div className="flex items-center justify-end gap-1">
+                                            <Button
+                                                variant="ghost"
+                                                size="icon"
+                                                onClick={() => {
+                                                    setViewTask(task);
+                                                    setIsViewModalOpen(true);
+                                                }}
+                                                title="View Details"
+                                                className="h-8 w-8 text-slate-500 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 cursor-pointer"
+                                            >
+                                                <Eye className="h-4 w-4" />
+                                            </Button>
                                             <Button
                                                 variant="ghost"
                                                 size="icon"
                                                 onClick={() => openEditModal(task)}
+                                                title="Edit Task"
                                                 className="h-8 w-8 text-slate-500 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 cursor-pointer"
                                             >
                                                 <Pencil className="h-4 w-4" />
@@ -433,6 +451,7 @@ const AdminTasks: React.FC = () => {
                                                 variant="ghost"
                                                 size="icon"
                                                 onClick={() => handleDeleteTask(task)}
+                                                title="Delete Task"
                                                 className="h-8 w-8 text-slate-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 cursor-pointer"
                                             >
                                                 <Trash2 className="h-4 w-4" />
@@ -642,6 +661,98 @@ const AdminTasks: React.FC = () => {
                             {isSubmitting ? "Saving..." : isEditing ? "Update Task" : "Assign Task"}
                         </Button>
                     </DialogFooter>
+                </DialogContent>
+            </Dialog>
+
+            {/* --- View Task Details Modal --- */}
+            <Dialog open={isViewModalOpen} onOpenChange={setIsViewModalOpen}>
+                <DialogContent className="sm:max-w-[550px] bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 p-6">
+                    {viewTask && (
+                        <>
+                            <DialogHeader>
+                                <div className="flex items-center gap-2">
+                                    <span className="p-2 rounded-lg bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400">
+                                        <CheckSquare className="h-5 w-5" />
+                                    </span>
+                                    <div>
+                                        <DialogTitle className="text-xl font-bold text-slate-900 dark:text-white">
+                                            Task Details
+                                        </DialogTitle>
+                                        {viewTask.project && (
+                                            <span className="text-xs text-slate-500 dark:text-slate-400">
+                                                Project: {viewTask.project}
+                                            </span>
+                                        )}
+                                    </div>
+                                </div>
+                            </DialogHeader>
+
+                            <div className="space-y-5 py-3">
+                                {/* Task Title & Status Badges */}
+                                <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 space-y-3">
+                                    <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+                                        {viewTask.title}
+                                    </h3>
+                                    <div className="flex flex-wrap items-center gap-2">
+                                        <div className={`px-2.5 py-1 rounded text-xs font-semibold border ${getPriorityColor(viewTask.priority)}`}>
+                                            Priority: {viewTask.priority}
+                                        </div>
+                                        <div className={`px-2.5 py-1 rounded text-xs font-semibold ${getStatusColor(viewTask.status)}`}>
+                                            Status: {viewTask.status}
+                                        </div>
+                                        <div className="flex items-center text-xs text-slate-600 dark:text-slate-400 gap-1 bg-white dark:bg-slate-800 px-2.5 py-1 rounded border border-slate-200 dark:border-slate-700">
+                                            <Calendar className="h-3.5 w-3.5" />
+                                            Due: {new Date(viewTask.due_date).toLocaleDateString()}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Assigned Employee Info */}
+                                <div className="space-y-1.5">
+                                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Assigned To</label>
+                                    <div className="flex items-center gap-3 p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+                                        <Avatar className="h-10 w-10 border border-slate-200 dark:border-slate-700">
+                                            <AvatarImage src={viewTask.assigned_to_avatar} />
+                                            <AvatarFallback className="bg-blue-100 text-blue-700 text-sm font-semibold">{viewTask.assigned_to_name?.[0]}</AvatarFallback>
+                                        </Avatar>
+                                        <div>
+                                            <h4 className="font-bold text-slate-900 dark:text-white text-sm">{viewTask.assigned_to_name}</h4>
+                                            <p className="text-xs text-slate-500 dark:text-slate-400">{viewTask.assigned_to_designation || "Employee"}</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Task Description */}
+                                <div className="space-y-1.5">
+                                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Description</label>
+                                    <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 min-h-[100px]">
+                                        <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-wrap">
+                                            {viewTask.description || "No additional description provided for this task."}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <DialogFooter className="gap-2">
+                                <Button
+                                    variant="outline"
+                                    onClick={() => setIsViewModalOpen(false)}
+                                    className="cursor-pointer dark:text-white"
+                                >
+                                    Close
+                                </Button>
+                                <Button
+                                    onClick={() => {
+                                        setIsViewModalOpen(false);
+                                        openEditModal(viewTask);
+                                    }}
+                                    className="bg-blue-600 hover:bg-blue-700 text-white cursor-pointer flex items-center gap-2"
+                                >
+                                    <Pencil className="h-4 w-4" /> Edit Task
+                                </Button>
+                            </DialogFooter>
+                        </>
+                    )}
                 </DialogContent>
             </Dialog>
 
