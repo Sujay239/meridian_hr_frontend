@@ -1003,10 +1003,18 @@ const Chats: React.FC = () => {
                       )}
                     </div>
                     {activeChat.type === "direct" ? (
-                      <p className="text-xs text-green-600 dark:text-green-400 font-medium flex items-center gap-1">
-                        <span className="w-1.5 h-1.5 bg-green-500 rounded-full inline-block" />{" "}
-                        Online
-                      </p>
+                      activeChat.otherUserId &&
+                      onlineUsers.has(String(activeChat.otherUserId)) ? (
+                        <p className="text-xs text-green-600 dark:text-green-400 font-medium flex items-center gap-1">
+                          <span className="w-1.5 h-1.5 bg-green-500 rounded-full inline-block" />{" "}
+                          Online
+                        </p>
+                      ) : (
+                        <p className="text-xs text-slate-400 dark:text-slate-500 font-medium flex items-center gap-1">
+                          <span className="w-1.5 h-1.5 bg-slate-300 dark:bg-slate-600 rounded-full inline-block" />{" "}
+                          Offline
+                        </p>
+                      )
                     ) : (
                       <p className="text-xs text-slate-500 dark:text-slate-400">
                         {activeChat.members?.length || 0} Members
