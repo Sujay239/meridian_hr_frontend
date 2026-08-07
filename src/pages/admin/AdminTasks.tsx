@@ -66,6 +66,16 @@ interface DepartmentItem {
     code: string;
 }
 
+const API_BASE_URL = import.meta.env.VITE_BASE_URL;
+
+const formatAvatarUrl = (url?: string) => {
+    if (!url) return "";
+    if (url.startsWith("http://") || url.startsWith("https://")) return url;
+    if (url.startsWith("/uploads/")) return `${API_BASE_URL}${url}`;
+    if (url.startsWith("uploads/")) return `${API_BASE_URL}/${url}`;
+    return `${API_BASE_URL}/uploads/${url}`;
+};
+
 const AdminTasks: React.FC = () => {
     const [tasks, setTasks] = useState<Task[]>([]);
     const [employees, setEmployees] = useState<Employee[]>([]);
@@ -372,8 +382,8 @@ const AdminTasks: React.FC = () => {
                                     <TableCell>
                                         <div className="flex items-center gap-3">
                                             <Avatar className="h-9 w-9 border border-slate-200 dark:border-slate-700">
-                                                <AvatarImage src={task.assigned_to_avatar} />
-                                                <AvatarFallback className="bg-blue-100 text-blue-700 text-xs">{task.assigned_to_name?.[0]}</AvatarFallback>
+                                                <AvatarImage src={formatAvatarUrl(task.assigned_to_avatar, task.assigned_to_name)} />
+                                                <AvatarFallback className="bg-blue-100 text-blue-700 text-xs font-semibold">{(task.assigned_to_name || "?")?.[0]}</AvatarFallback>
                                             </Avatar>
                                             <div className="flex flex-col">
                                                 <span className="font-medium text-slate-900 dark:text-white line-clamp-1" title={task.title}>{task.title}</span>
@@ -479,8 +489,8 @@ const AdminTasks: React.FC = () => {
                             <div className="flex justify-between items-start">
                                 <div className="flex items-center gap-3">
                                     <Avatar className="h-10 w-10 border border-slate-200 dark:border-slate-700">
-                                        <AvatarImage src={task.assigned_to_avatar} />
-                                        <AvatarFallback className="bg-blue-100 text-blue-700 text-sm">{task.assigned_to_name?.[0]}</AvatarFallback>
+                                        <AvatarImage src={formatAvatarUrl(task.assigned_to_avatar, task.assigned_to_name)} />
+                                        <AvatarFallback className="bg-blue-100 text-blue-700 text-sm font-semibold">{(task.assigned_to_name || "?")?.[0]}</AvatarFallback>
                                     </Avatar>
                                     <div>
                                         <p className="font-medium text-slate-900 dark:text-white line-clamp-1">{task.assigned_to_name}</p>
@@ -712,8 +722,8 @@ const AdminTasks: React.FC = () => {
                                     <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Assigned To</label>
                                     <div className="flex items-center gap-3 p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
                                         <Avatar className="h-10 w-10 border border-slate-200 dark:border-slate-700">
-                                            <AvatarImage src={viewTask.assigned_to_avatar} />
-                                            <AvatarFallback className="bg-blue-100 text-blue-700 text-sm font-semibold">{viewTask.assigned_to_name?.[0]}</AvatarFallback>
+                                            <AvatarImage src={formatAvatarUrl(viewTask.assigned_to_avatar, viewTask.assigned_to_name)} />
+                                            <AvatarFallback className="bg-blue-100 text-blue-700 text-sm font-semibold">{(viewTask.assigned_to_name || "?")?.[0]}</AvatarFallback>
                                         </Avatar>
                                         <div>
                                             <h4 className="font-bold text-slate-900 dark:text-white text-sm">{viewTask.assigned_to_name}</h4>
