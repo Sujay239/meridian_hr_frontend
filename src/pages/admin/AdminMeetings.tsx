@@ -22,6 +22,14 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { DatePicker } from "@/components/ui/date-picker";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 
 import {
     AlertDialog,
@@ -64,6 +72,84 @@ const validateMeetingTimes = (startIso: string, endIso: string): string | null =
         return "Meeting end time must be after the start time";
     }
     return null;
+};
+
+const TIME_OPTIONS = [
+    "00:00", "00:30", "01:00", "01:30", "02:00", "02:30", "03:00", "03:30",
+    "04:00", "04:30", "05:00", "05:30", "06:00", "06:30", "07:00", "07:30",
+    "08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30",
+    "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30",
+    "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30",
+    "20:00", "20:30", "21:00", "21:30", "22:00", "22:30", "23:00", "23:30"
+];
+
+const formatTimeLabel = (timeStr: string) => {
+    if (!timeStr) return "";
+    const [hStr, mStr] = timeStr.split(":");
+    const h = parseInt(hStr, 10);
+    const m = parseInt(mStr, 10);
+    if (isNaN(h) || isNaN(m)) return timeStr;
+    const period = h >= 12 ? "PM" : "AM";
+    const hour12 = h % 12 === 0 ? 12 : h % 12;
+    return `${hour12}:${m < 10 ? "0" + m : m} ${period}`;
+};
+
+const DateTimePickerInput: React.FC<{
+    value: string;
+    onChange: (val: string) => void;
+    label: string;
+    required?: boolean;
+}> = ({ value, onChange, label, required }) => {
+    const datePart = value ? value.slice(0, 10) : "";
+    const timePart = value ? value.slice(11, 16) : "09:00";
+
+    const handleDateChange = (newDate: string) => {
+        if (!newDate) {
+            onChange("");
+            return;
+        }
+        const currentT = timePart || "09:00";
+        onChange(`${newDate}T${currentT}`);
+    };
+
+    const handleTimeChange = (newTime: string) => {
+        const currentD = datePart || new Date().toISOString().slice(0, 10);
+        onChange(`${currentD}T${newTime}`);
+    };
+
+    return (
+        <div className="grid gap-2">
+            <Label className="text-slate-700 dark:text-slate-300 font-medium text-xs md:text-sm">
+                {label} {required && <span className="text-red-500">*</span>}
+            </Label>
+            <div className="grid grid-cols-5 gap-2">
+                <div className="col-span-3">
+                    <DatePicker
+                        value={datePart}
+                        onChange={handleDateChange}
+                        placeholder="Select date"
+                    />
+                </div>
+                <div className="col-span-2">
+                    <Select value={timePart} onValueChange={handleTimeChange}>
+                        <SelectTrigger className="bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white h-10 rounded-xl cursor-pointer">
+                            <Clock className="h-4 w-4 text-slate-500 mr-1.5 shrink-0" />
+                            <SelectValue placeholder="Time">
+                                {formatTimeLabel(timePart)}
+                            </SelectValue>
+                        </SelectTrigger>
+                        <SelectContent className="max-h-56 bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 z-[99999]">
+                            {TIME_OPTIONS.map((t) => (
+                                <SelectItem key={t} value={t} className="cursor-pointer">
+                                    {formatTimeLabel(t)}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                </div>
+            </div>
+        </div>
+    );
 };
 
 
@@ -448,14 +534,18 @@ const AdminMeetings: React.FC = () => {
                             <Textarea id="description" value={description} onChange={(e: any) => setDescription(e.target.value)} placeholder="Meeting agenda..." className="bg-slate-50 dark:bg-slate-900 dark:text-white" />
                         </div>
                         <div className="grid max-sm:grid-cols-1 grid-cols-2 gap-4">
-                            <div className="grid gap-2">
-                                <Label htmlFor="start">Start Time <span className="text-red-500">*</span></Label>
-                                <Input id="start" type="datetime-local" min={getMinDateTimeLocal()} value={startTime} onChange={(e) => setStartTime(e.target.value)} className="bg-slate-50 dark:bg-slate-900 dark:text-white border-slate-200 dark:border-slate-800 rounded-xl focus-visible:ring-blue-500" required />
-                            </div>
-                            <div className="grid gap-2">
-                                <Label htmlFor="end">End Time <span className="text-red-500">*</span></Label>
-                                <Input id="end" type="datetime-local" min={startTime || getMinDateTimeLocal()} value={endTime} onChange={(e) => setEndTime(e.target.value)} className="bg-slate-50 dark:bg-slate-900 dark:text-white border-slate-200 dark:border-slate-800 rounded-xl focus-visible:ring-blue-500" required />
-                            </div>
+                            <DateTimePickerInput
+                                label="Start Time"
+                                value={startTime}
+                                onChange={setStartTime}
+                                required
+                            />
+                            <DateTimePickerInput
+                                label="End Time"
+                                value={endTime}
+                                onChange={setEndTime}
+                                required
+                            />
                         </div>
                         <div className="grid gap-2">
                             <Label htmlFor="joinUrl">Meeting Link <span className="text-red-500">*</span></Label>
@@ -545,14 +635,18 @@ const AdminMeetings: React.FC = () => {
                             <Textarea id="edit-description" value={description} onChange={(e: any) => setDescription(e.target.value)} placeholder="Meeting agenda..." className="bg-slate-50 dark:bg-slate-900 dark:text-white" />
                         </div>
                         <div className="grid max-sm:grid-cols-1 grid-cols-2 gap-4">
-                            <div className="grid gap-2">
-                                <Label htmlFor="edit-start">Start Time <span className="text-red-500">*</span></Label>
-                                <Input id="edit-start" type="datetime-local" min={getMinDateTimeLocal()} value={startTime} onChange={(e) => setStartTime(e.target.value)} className="bg-slate-50 dark:bg-slate-900 dark:text-white border-slate-200 dark:border-slate-800 rounded-xl focus-visible:ring-blue-500" required />
-                            </div>
-                            <div className="grid gap-2">
-                                <Label htmlFor="edit-end">End Time <span className="text-red-500">*</span></Label>
-                                <Input id="edit-end" type="datetime-local" min={startTime || getMinDateTimeLocal()} value={endTime} onChange={(e) => setEndTime(e.target.value)} className="bg-slate-50 dark:bg-slate-900 dark:text-white border-slate-200 dark:border-slate-800 rounded-xl focus-visible:ring-blue-500" required />
-                            </div>
+                            <DateTimePickerInput
+                                label="Start Time"
+                                value={startTime}
+                                onChange={setStartTime}
+                                required
+                            />
+                            <DateTimePickerInput
+                                label="End Time"
+                                value={endTime}
+                                onChange={setEndTime}
+                                required
+                            />
                         </div>
                         <div className="grid gap-2">
                             <Label htmlFor="edit-joinUrl">Meeting Link <span className="text-red-500">*</span></Label>
