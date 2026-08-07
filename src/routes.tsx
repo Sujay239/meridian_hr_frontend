@@ -32,12 +32,12 @@ import ResetPassword from './pages/auth/ResetPassword';
 import ForgotPassword from './pages/auth/ForgotPassword';
 import Verify2FA from './pages/auth/Verify2FA';
 import TwoFactorGuard from './components/TwoFactorGuard';
-import PlaceholderPage from './pages/PlaceholderPage';
 import Overview from './pages/Overview';
 import People from './pages/People';
 import Documents from './pages/Documents';
 import Requests from './pages/Requests';
 import Knowledge from './pages/Knowledge';
+import Support from './pages/Support';
 
 const routes: RouteObject[] = [
   {
@@ -94,7 +94,7 @@ const routes: RouteObject[] = [
       },
       {
         path: "support",
-        element: <PlaceholderPage title="Support" />,
+        element: <Support />,
       },
       {
         path: "tasks",
@@ -174,7 +174,7 @@ const routes: RouteObject[] = [
       },
       {
         path: "support",
-        element: <PlaceholderPage title="Support" />,
+        element: <Support />,
       },
       {
         path: "employees",
