@@ -37,13 +37,7 @@ import {
 const API_BASE_URL = import.meta.env.VITE_BASE_URL;
 const GOOGLE_MEET_API_KEY = import.meta.env.VITE_GOOGLE_MEET_API_KEY || "AIzaSyA5qKrIOZa1OrefEVOLHLuVpoK250wOIBQ";
 
-const generateGoogleMeetUrl = () => {
-    if (!GOOGLE_MEET_API_KEY) {
-        console.warn("Google Meet API Key not configured.");
-    }
-    // Return Google's official Google Meet room creation URL
-    return "https://meet.google.com/new";
-};
+
 
 interface User {
     id: number;
@@ -153,13 +147,13 @@ const AdminMeetings: React.FC = () => {
     };
 
     const handleCreateMeeting = async () => {
-        if (!title || !startTime || !endTime) {
-            showError("Please fill in all required fields");
+        if (!title || !startTime || !endTime || !joinUrl.trim()) {
+            showError("Please fill in all required fields (including Meeting Link)");
             return;
         }
 
         try {
-            const finalJoinUrl = joinUrl.trim() || generateGoogleMeetUrl();
+            const finalJoinUrl = joinUrl.trim();
 
             const response = await fetch(`${API_BASE_URL}/admin/meetings/create`, {
                 method: "POST",
@@ -188,10 +182,13 @@ const AdminMeetings: React.FC = () => {
     };
 
     const handleUpdateMeeting = async () => {
-        if (!editMeeting || !title || !startTime || !endTime) return;
+        if (!editMeeting || !title || !startTime || !endTime || !joinUrl.trim()) {
+            showError("Please fill in all required fields (including Meeting Link)");
+            return;
+        }
 
         try {
-            const finalJoinUrl = joinUrl.trim() || generateGoogleMeetUrl();
+            const finalJoinUrl = joinUrl.trim();
 
             const response = await fetch(`${API_BASE_URL}/admin/meetings/${editMeeting.id}`, {
                 method: "PUT",
@@ -419,12 +416,12 @@ const AdminMeetings: React.FC = () => {
                             </div>
                         </div>
                         <div className="grid gap-2">
-                            <Label htmlFor="joinUrl">Meeting Link (Optional)</Label>
-                            <Input id="joinUrl" type="url" value={joinUrl} onChange={(e) => setJoinUrl(e.target.value)} placeholder="e.g. https://meet.google.com/abc-defg-hij (Leave blank to auto-generate)" className="bg-slate-50 dark:bg-slate-900 dark:text-white" />
+                            <Label htmlFor="joinUrl">Meeting Link <span className="text-red-500">*</span></Label>
+                            <Input id="joinUrl" type="url" value={joinUrl} onChange={(e) => setJoinUrl(e.target.value)} placeholder="e.g. https://meet.google.com/abc-defg-hij" className="bg-slate-50 dark:bg-slate-900 dark:text-white" required />
                         </div>
                         <div className="flex items-center gap-2.5 p-3 rounded-xl bg-blue-50/80 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border border-blue-100 dark:border-blue-900/50 text-xs font-medium">
                             <Video className="h-4 w-4 shrink-0 text-blue-600 dark:text-blue-400" />
-                            <span>Provide a custom meeting URL or leave blank to automatically generate a Google Meet room.</span>
+                            <span>Enter the meeting URL (Google Meet, Zoom, Teams, etc.) for participants to join.</span>
                         </div>
 
                         {/* Multi-Select Users */}
@@ -516,12 +513,12 @@ const AdminMeetings: React.FC = () => {
                             </div>
                         </div>
                         <div className="grid gap-2">
-                            <Label htmlFor="edit-joinUrl">Meeting Link</Label>
-                            <Input id="edit-joinUrl" type="url" value={joinUrl} onChange={(e) => setJoinUrl(e.target.value)} placeholder="e.g. https://meet.google.com/abc-defg-hij" className="bg-slate-50 dark:bg-slate-900 dark:text-white" />
+                            <Label htmlFor="edit-joinUrl">Meeting Link <span className="text-red-500">*</span></Label>
+                            <Input id="edit-joinUrl" type="url" value={joinUrl} onChange={(e) => setJoinUrl(e.target.value)} placeholder="e.g. https://meet.google.com/abc-defg-hij" className="bg-slate-50 dark:bg-slate-900 dark:text-white" required />
                         </div>
                         <div className="flex items-center gap-2.5 p-3 rounded-xl bg-blue-50/80 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border border-blue-100 dark:border-blue-900/50 text-xs font-medium">
                             <Video className="h-4 w-4 shrink-0 text-blue-600 dark:text-blue-400" />
-                            <span>Provide a custom meeting URL or leave blank to use auto-generated link.</span>
+                            <span>Enter the meeting URL (Google Meet, Zoom, Teams, etc.) for participants to join.</span>
                         </div>
 
                         {/* Multi-Select Users */}
