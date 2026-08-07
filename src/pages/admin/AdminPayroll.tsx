@@ -22,8 +22,10 @@ import { useNotification } from "../../components/NotificationProvider";
 
 const API_BASE_URL = import.meta.env.VITE_BASE_URL;
 
-const formatAvatarUrl = (url?: string) => {
-    if (!url) return "";
+const formatAvatarUrl = (url?: string, name?: string) => {
+    if (!url || url.includes("avatar-seed-")) {
+        return name ? `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random` : "";
+    }
     if (url.startsWith("http://") || url.startsWith("https://")) return url;
     if (url.startsWith("/uploads/")) return `${API_BASE_URL}${url}`;
     if (url.startsWith("uploads/")) return `${API_BASE_URL}/${url}`;
