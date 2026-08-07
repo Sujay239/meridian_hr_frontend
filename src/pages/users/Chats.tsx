@@ -45,6 +45,14 @@ const API_BASE_URL =
   import.meta.env.VITE_API_URL ||
   "http://localhost:3000";
 
+const formatAvatarUrl = (url?: string) => {
+  if (!url) return undefined;
+  if (url.startsWith("http://") || url.startsWith("https://")) return url;
+  if (url.startsWith("/uploads/")) return `${API_BASE_URL}${url}`;
+  if (url.startsWith("uploads/")) return `${API_BASE_URL}/${url}`;
+  return `${API_BASE_URL}/uploads/${url}`;
+};
+
 // --- Types ---
 type ChatType = "direct" | "group" | "space";
 
@@ -785,7 +793,7 @@ const Chats: React.FC = () => {
     >
       <div className="relative shrink-0">
         <Avatar className="h-10 w-10 border border-slate-200 dark:border-slate-700">
-          <AvatarImage src={contact.avatar} />
+          <AvatarImage src={formatAvatarUrl(contact.avatar)} />
           <AvatarFallback
             className={`text-xs font-bold ${contact.type === "space" ? "bg-indigo-100 text-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-400" : contact.type === "group" ? "bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400" : "bg-slate-200 text-slate-600 dark:bg-slate-700 dark:text-slate-300"}`}
           >
@@ -957,7 +965,7 @@ const Chats: React.FC = () => {
                   </Button>
 
                   <Avatar className="h-9 w-9 border border-slate-100 dark:border-slate-700">
-                    <AvatarImage src={activeChat.avatar} />
+                    <AvatarImage src={formatAvatarUrl(activeChat.avatar)} />
                     <AvatarFallback className="bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-200">
                       {activeChat.type === "space" ? (
                         <Hash size={16} />
@@ -1083,6 +1091,7 @@ const Chats: React.FC = () => {
                         >
                           {!msg.isMe && (
                             <Avatar className="h-8 w-8 mb-1 hidden sm:block">
+                              <AvatarImage src={formatAvatarUrl(activeChat.avatar)} />
                               <AvatarFallback className="text-[10px] bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200">
                                 {activeChat.name.substring(0, 1)}
                               </AvatarFallback>
@@ -1377,6 +1386,7 @@ const Chats: React.FC = () => {
                           </div>
 
                           <Avatar className="h-8 w-8">
+                            <AvatarImage src={formatAvatarUrl(emp.avatar)} />
                             <AvatarFallback className="bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 text-[10px]">
                               {emp.name.substring(0, 2)}
                             </AvatarFallback>
@@ -1522,7 +1532,7 @@ const Chats: React.FC = () => {
             {/* Profile Section */}
             <div className="p-8 flex flex-col items-center border-b border-slate-100 dark:border-slate-800">
               <Avatar className="h-32 w-32 mb-4 ring-4 ring-slate-50 dark:ring-slate-900 shadow-xl">
-                <AvatarImage src={activeChat.avatar} />
+                <AvatarImage src={formatAvatarUrl(activeChat.avatar)} />
                 <AvatarFallback className="text-4xl bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-200">
                   {activeChat.type === "space" ? (
                     <Hash size={48} />
@@ -1613,6 +1623,7 @@ const Chats: React.FC = () => {
                       >
                         <div className="flex items-center gap-3">
                           <Avatar className="h-9 w-9">
+                            <AvatarImage src={formatAvatarUrl(member.avatar)} />
                             <AvatarFallback className="bg-slate-200 dark:bg-slate-800 text-xs">
                               {member.name.substring(0, 2)}
                             </AvatarFallback>
