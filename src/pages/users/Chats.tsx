@@ -40,6 +40,11 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useNotification } from "../../components/NotificationProvider";
 import { io, type Socket } from "socket.io-client";
 
+const API_BASE_URL =
+  import.meta.env.VITE_BASE_URL ||
+  import.meta.env.VITE_API_URL ||
+  "http://localhost:3000";
+
 // --- Types ---
 type ChatType = "direct" | "group" | "space";
 
@@ -253,7 +258,7 @@ const Chats: React.FC = () => {
     const fetchCurrentUser = async () => {
       try {
         const res = await fetch(
-          `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/auth/myData`,
+          `${API_BASE_URL}/auth/myData`,
           {
             credentials: "include",
           },
@@ -272,7 +277,7 @@ const Chats: React.FC = () => {
     const fetchContacts = async () => {
       try {
         const res = await fetch(
-          `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/api/chats`,
+          `${API_BASE_URL}/api/chats`,
           {
             credentials: "include",
           },
@@ -292,7 +297,7 @@ const Chats: React.FC = () => {
     const fetchEmployees = async () => {
       try {
         const res = await fetch(
-          `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/api/chats/users`,
+          `${API_BASE_URL}/api/chats/users`,
           {
             credentials: "include",
           },
@@ -309,7 +314,7 @@ const Chats: React.FC = () => {
 
     // Socket Connection
     socket.current = io(
-      import.meta.env.VITE_API_URL || "http://localhost:3000",
+      API_BASE_URL,
       {
         withCredentials: true,
       },
@@ -415,7 +420,7 @@ const Chats: React.FC = () => {
       const fetchMessages = async () => {
         try {
           const res = await fetch(
-            `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/api/chats/${activeChat.id}/messages`,
+            `${API_BASE_URL}/api/chats/${activeChat.id}/messages`,
             {
               credentials: "include",
             },
@@ -498,7 +503,7 @@ const Chats: React.FC = () => {
 
     try {
       const res = await fetch(
-        `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/api/chats/create`,
+        `${API_BASE_URL}/api/chats/create`,
         {
           method: "POST",
           headers: {
@@ -710,7 +715,7 @@ const Chats: React.FC = () => {
       // It's a virtual contact. Create or Get real chat.
       try {
         const res = await fetch(
-          `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/api/chats/dm`,
+          `${API_BASE_URL}/api/chats/dm`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -751,7 +756,7 @@ const Chats: React.FC = () => {
       // Mark as read on backend
       try {
         await fetch(
-          `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/api/chats/mark-read`,
+          `${API_BASE_URL}/api/chats/mark-read`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -833,8 +838,8 @@ const Chats: React.FC = () => {
   );
 
   return (
-    <div className="p-0 lg:p-1 sm:-mx-6 lg:-mx-8 h-screen flex flex-col animate-in fade-in duration-500 lg:mt-0">
-      <Card className="flex-1 flex overflow-hidden border-slate-200 dark:border-slate-800 shadow-lg bg-white dark:bg-slate-950 h-full">
+    <div className="p-2 md:p-4 lg:p-6 h-[calc(100vh-1rem)] md:h-[calc(100vh-1.5rem)] flex flex-col animate-in fade-in duration-500">
+      <Card className="flex-1 flex overflow-hidden border-slate-200 dark:border-slate-800 shadow-lg bg-white dark:bg-slate-950 h-full rounded-2xl">
         {/* ================= LEFT SIDEBAR ================= */}
         <div
           className={`
