@@ -36,6 +36,36 @@ import {
 
 const API_BASE_URL = import.meta.env.VITE_BASE_URL;
 
+const getMinDateTimeLocal = () => {
+    const now = new Date();
+    const offsetMs = now.getTimezoneOffset() * 60000;
+    const localNow = new Date(now.getTime() - offsetMs);
+    return localNow.toISOString().slice(0, 16);
+};
+
+const validateMeetingTimes = (startIso: string, endIso: string): string | null => {
+    const now = new Date();
+    const startDate = new Date(startIso);
+    const endDate = new Date(endIso);
+
+    if (!startIso || isNaN(startDate.getTime())) {
+        return "Please select a valid meeting start time";
+    }
+    if (!endIso || isNaN(endDate.getTime())) {
+        return "Please select a valid meeting end time";
+    }
+    if (startDate <= now) {
+        return "Meeting start time must be in the future";
+    }
+    if (endDate <= now) {
+        return "Meeting end time cannot be in the past";
+    }
+    if (endDate <= startDate) {
+        return "Meeting end time must be after the start time";
+    }
+    return null;
+};
+
 
 
 
@@ -152,6 +182,12 @@ const AdminMeetings: React.FC = () => {
             return;
         }
 
+        const validationError = validateMeetingTimes(startTime, endTime);
+        if (validationError) {
+            showError(validationError);
+            return;
+        }
+
         try {
             const finalJoinUrl = joinUrl.trim();
 
@@ -184,6 +220,12 @@ const AdminMeetings: React.FC = () => {
     const handleUpdateMeeting = async () => {
         if (!editMeeting || !title || !startTime || !endTime || !joinUrl.trim()) {
             showError("Please fill in all required fields (including Meeting Link)");
+            return;
+        }
+
+        const validationError = validateMeetingTimes(startTime, endTime);
+        if (validationError) {
+            showError(validationError);
             return;
         }
 
@@ -407,12 +449,12 @@ const AdminMeetings: React.FC = () => {
                         </div>
                         <div className="grid max-sm:grid-cols-1 grid-cols-2 gap-4">
                             <div className="grid gap-2">
-                                <Label htmlFor="start">Start Time</Label>
-                                <Input id="start" type="datetime-local" value={startTime} onChange={(e) => setStartTime(e.target.value)} className="bg-slate-50 dark:bg-slate-900 dark:text-white" />
+                                <Label htmlFor="start">Start Time <span className="text-red-500">*</span></Label>
+                                <Input id="start" type="datetime-local" min={getMinDateTimeLocal()} value={startTime} onChange={(e) => setStartTime(e.target.value)} className="bg-slate-50 dark:bg-slate-900 dark:text-white border-slate-200 dark:border-slate-800 rounded-xl focus-visible:ring-blue-500" required />
                             </div>
                             <div className="grid gap-2">
-                                <Label htmlFor="end">End Time</Label>
-                                <Input id="end" type="datetime-local" value={endTime} onChange={(e) => setEndTime(e.target.value)} className="bg-slate-50 dark:bg-slate-900 dark:text-white" />
+                                <Label htmlFor="end">End Time <span className="text-red-500">*</span></Label>
+                                <Input id="end" type="datetime-local" min={startTime || getMinDateTimeLocal()} value={endTime} onChange={(e) => setEndTime(e.target.value)} className="bg-slate-50 dark:bg-slate-900 dark:text-white border-slate-200 dark:border-slate-800 rounded-xl focus-visible:ring-blue-500" required />
                             </div>
                         </div>
                         <div className="grid gap-2">
@@ -504,12 +546,12 @@ const AdminMeetings: React.FC = () => {
                         </div>
                         <div className="grid max-sm:grid-cols-1 grid-cols-2 gap-4">
                             <div className="grid gap-2">
-                                <Label htmlFor="edit-start">Start Time</Label>
-                                <Input id="edit-start" type="datetime-local" value={startTime} onChange={(e) => setStartTime(e.target.value)} className="bg-slate-50 dark:bg-slate-900 dark:text-white" />
+                                <Label htmlFor="edit-start">Start Time <span className="text-red-500">*</span></Label>
+                                <Input id="edit-start" type="datetime-local" min={getMinDateTimeLocal()} value={startTime} onChange={(e) => setStartTime(e.target.value)} className="bg-slate-50 dark:bg-slate-900 dark:text-white border-slate-200 dark:border-slate-800 rounded-xl focus-visible:ring-blue-500" required />
                             </div>
                             <div className="grid gap-2">
-                                <Label htmlFor="edit-end">End Time</Label>
-                                <Input id="edit-end" type="datetime-local" value={endTime} onChange={(e) => setEndTime(e.target.value)} className="bg-slate-50 dark:bg-slate-900 dark:text-white" />
+                                <Label htmlFor="edit-end">End Time <span className="text-red-500">*</span></Label>
+                                <Input id="edit-end" type="datetime-local" min={startTime || getMinDateTimeLocal()} value={endTime} onChange={(e) => setEndTime(e.target.value)} className="bg-slate-50 dark:bg-slate-900 dark:text-white border-slate-200 dark:border-slate-800 rounded-xl focus-visible:ring-blue-500" required />
                             </div>
                         </div>
                         <div className="grid gap-2">
